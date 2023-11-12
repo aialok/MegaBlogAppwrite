@@ -2,19 +2,21 @@ import envConfig from "../config/config";
 
 import { Client, Account, ID } from "appwrite";
 
-const client = new Client();
-const account = new Account();
+ console.log("Appwrite Url", envConfig.VITE_APPWRITE_URL)
+ console.log("Appwrite Project Id",envConfig.VITE_APPWRITE_PROJECT_ID)
 
 class AuthServices {
+  client = new Client();
   account;
   constructor() {
-    client.setEndpoint(envConfig.VITE_APPWRITE_URL);
-    client.setProject(envConfig.VITE_APPWRITE_PROJECT_ID);
+    this.client.setEndpoint(envConfig.VITE_APPWRITE_URL);
+    this.client.setProject(envConfig.VITE_APPWRITE_PROJECT_ID);
+    this.account = new Account(this.client);
   }
 
   async createAccount({ name, email, password }) {
     try {
-      const userAccount = await account.create(
+      const userAccount = await this.account.create(
         ID.unique(),
         email,
         password,
@@ -34,7 +36,7 @@ class AuthServices {
 
   async login({ email, password }) {
     try {
-      const response = await account.createEmailSession(email, password);
+      const response = await this.account.createEmailSession(email, password);
 
       return response;
     } catch (error) {
@@ -44,7 +46,7 @@ class AuthServices {
 
   async logout() {
     try {
-      await account.deleteSessions();
+      await this.account.deleteSessions();
     } catch (error) {
       console.log("There is some error in appwrite auth setvice");
       throw error;
@@ -53,11 +55,12 @@ class AuthServices {
 
   async getUserSessions() {
     try {
-      const response = await account.get();
+      const response = await this.account.get();
+      console.log(response)
       return response;
     } catch (error) {
-      console.log("There is some error in appwrite auth setvice");
-      throw error;
+      console.log("There is some error in appwrite auth setvice", error);
+      // throw error;
     }
   }
 }

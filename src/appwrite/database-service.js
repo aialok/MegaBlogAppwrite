@@ -98,13 +98,31 @@ class DatabaseServices {
     try {
       return await this.bucket.createFile(
         envConfig.VITE_APPWRITE_BUCKET_ID,
-        file,
-        "image/jpeg"
+        ID.unique(),
+        file
       );
     } catch (error) {
       console.log("There is error in uploading the file", error);
     }
   }
+
+  async deleteFile(fileId) {
+        try {
+            return await this.bucket.deleteFile(envConfig.VITE_APPWRITE_BUCKET_ID, fileId);
+        } catch (error) {
+            
+            console.log("There is error in deleting the file", error);
+
+        }
+  }
+
+  getFilePreview(fileId) {
+    return this.bucket.getFilePreview(
+      envConfig.VITE_APPWRITE_BUCKET_ID,
+      fileId
+    );
+  }
+
 
 }
 
