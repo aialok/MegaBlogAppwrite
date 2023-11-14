@@ -6,9 +6,10 @@ import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import { Outlet } from "react-router-dom";
 import { login, logout } from "./store/authSlice";
+import RTE from "./components/RTE";
 
 export default function App() {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -32,6 +33,7 @@ export default function App() {
       <Header/>
       <main>
        TODO: {/* <Outlet/> */}
+       <RTE/>
       </main>
       <Footer/>
     </div>
